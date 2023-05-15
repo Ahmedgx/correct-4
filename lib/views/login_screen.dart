@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:untitled1/core/network/cache_helper.dart';
 import 'package:untitled1/core/network/dio_helper.dart';
@@ -197,11 +199,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             function: () async {
                               if (formKey.currentState != null &&
                                   formKey.currentState!.validate()) {
-                                var response = await DioHelper.post(route: '/users/login', data: {
-                                  'email': emailcontroller.text,
-                                  'password': passwordcontroller.text,
-                                });
-                                await CacheHelper.saveData(key: Cache.token , value: response['tokens']['access_token']);
+                                var response = await DioHelper.post(
+                                    route: 'users/login/',
+                                    data: {
+                                      'email': emailcontroller.text,
+                                      'password': passwordcontroller.text,
+                                    });
+                                await CacheHelper.saveData(
+                                    key: Cache.token,
+                                    value: response['data']['tokens']
+                                        ['access_token']);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

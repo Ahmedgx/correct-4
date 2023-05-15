@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:untitled1/core/const/resource.dart';
 
@@ -7,7 +9,7 @@ class DioHelper {
 
   static init() {
     BaseOptions options = BaseOptions(
-      baseUrl: Apis.baseUrl,
+      baseUrl: 'http://localhost:3000/',
       validateStatus: (status) {
         return !(status.toString() == '401');
       },
@@ -25,11 +27,11 @@ class DioHelper {
   }) async {
     late Response response;
 
-      response = await dio.get(
-        route,
-        queryParameters: parameters,
-      );
-      return response.data;
+    response = await dio.get(
+      route,
+      queryParameters: parameters,
+    );
+    return response.data;
   }
 
   static Future post({
@@ -40,41 +42,37 @@ class DioHelper {
   }) async {
     late Response response;
 
-      response = await dio.post(
-        route,
-        queryParameters: parameters,
-        data: data,
-      );
-      return response.data;
+    response = await dio.post(
+      route,
+      queryParameters: parameters,
+      data: data,
+    );
+    log(response.data.toString());
+    return response.data;
   }
 
   static Future put(
       {required String route,
       Map<String, dynamic>? parameters,
       dynamic data}) async {
-
-
-      Response response = await dio.put(
-        route,
-        queryParameters: parameters,
-        data: data,
-      );
-      return response.data;
+    Response response = await dio.put(
+      route,
+      queryParameters: parameters,
+      data: data,
+    );
+    return response.data;
   }
 
   static Future delete(
       {required String route,
       Map<String, dynamic>? parameters,
       dynamic data}) async {
+    Response response = await dio.delete(
+      route,
+      queryParameters: parameters,
+      data: data,
+    );
 
-
-      Response response = await dio.delete(
-        route,
-        queryParameters: parameters,
-        data: data,
-      );
-
-      return response.data;
-
+    return response.data;
   }
 }

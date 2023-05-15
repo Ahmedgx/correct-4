@@ -246,24 +246,20 @@ class _SignupScreenState extends State<SignupScreen> {
                             function: () async {
                               if (formKey.currentState != null &&
                                   formKey.currentState!.validate()) {
-                                var response = await DioHelper.post(
-                                    route: '/users',
-                                    data: {
-                                      'email': emailcontroller.text,
-                                      'password': passwordcontroller.text,
-                                      "password_confirmation":
-                                          confirmcontroller.text,
-                                      "phone": phonecontroller.text,
-                                      "first_name": fnamecontroller.text,
-                                      "last_name": lnamecontroller.text,
-                                    });
-                                await CacheHelper.saveData(
-                                    key: Cache.token,
-                                    value: response['tokens']['access_token']);
+                                var response =
+                                    await DioHelper.post(route: 'users', data: {
+                                  'email': emailcontroller.text,
+                                  'password': passwordcontroller.text,
+                                  "password_confirmation":
+                                      confirmcontroller.text,
+                                  "phone": phonecontroller.text,
+                                  "first_name": fnamecontroller.text,
+                                  "last_name": lnamecontroller.text,
+                                });
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => classesScreen(),
+                                    builder: (context) => LoginScreen(),
                                   ),
                                 );
                               }
