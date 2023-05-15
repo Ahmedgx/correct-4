@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 import '../core/network/dio_helper.dart';
-import 'addition_screen.dart';
+import 'class_screen.dart';
 
 class classesScreen extends StatefulWidget {
   const classesScreen({Key? key}) : super(key: key);
@@ -14,7 +15,9 @@ class _classesScreenState extends State<classesScreen> {
   var formKey = GlobalKey<FormState>();
 
   Future<Classes> getData() async {
-    var response = await DioHelper.post(route: '/users/classes', data: {});
+    var response = await DioHelper.get(
+      route: 'users/classes',
+    );
     Classes classes = Classes.fromJson(response);
     return classes;
   }
@@ -23,135 +26,143 @@ class _classesScreenState extends State<classesScreen> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: getData(),
-      builder: (context, AsyncSnapshot<Classes> snapshot) => Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            //  TODO: Add New Card
-          },
-          backgroundColor: const Color(0xffffffff),
-          child: const Image(
-            image: AssetImage('Assets/images/add.png'),
-          ),
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        color: const Color(0xff000000),
-                        iconSize: 32,
-                        icon: const Icon(
-                          Icons.menu_rounded,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      const Text(
-                        'Correct',
-                        style: TextStyle(
-                          color: Color(0xff000000),
-                          fontWeight: FontWeight.w700,
-                          fontSize: 26,
-                          fontFamily: 'poppins',
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
-                      const Text(
-                        '4',
-                        style: TextStyle(
-                          color: Color(0xff61BDEE),
-                          fontWeight: FontWeight.w700,
-                          fontSize: 26,
-                          fontFamily: 'poppins',
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () {},
-                        iconSize: 45,
-                        icon: const CircleAvatar(
-                          radius: 28,
-                          backgroundColor: Color(0xff4E4E4E),
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ],
+      builder: (context, AsyncSnapshot<Classes> snapshot) =>
+          (snapshot.connectionState == ConnectionState.done)
+              ? Scaffold(
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () {
+                      //  TODO: Add New Card
+                    },
+                    backgroundColor: const Color(0xffffffff),
+                    child: const Image(
+                      image: AssetImage('Assets/images/add.png'),
+                    ),
                   ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(13.0),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'your',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Poppins'),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        const Text(
-                          'classes',
-                          style: TextStyle(
-                              color: Color(0xff61BDEE),
-                              fontSize: 28,
-                              fontWeight: FontWeight.w900,
-                              fontFamily: 'Poppins-Bold'),
-                        ),
-                        const Spacer(),
-                        Center(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.search_rounded,
-                              size: 30,
-                              color: Color(0xff61BDEE),
+                  body: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  color: const Color(0xff000000),
+                                  iconSize: 32,
+                                  icon: const Icon(
+                                    Icons.menu_rounded,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Text(
+                                  'Correct',
+                                  style: TextStyle(
+                                    color: Color(0xff000000),
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 26,
+                                    fontFamily: 'poppins',
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5.0,
+                                ),
+                                const Text(
+                                  '4',
+                                  style: TextStyle(
+                                    color: Color(0xff61BDEE),
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 26,
+                                    fontFamily: 'poppins',
+                                  ),
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: () {},
+                                  iconSize: 45,
+                                  icon: const CircleAvatar(
+                                    radius: 28,
+                                    backgroundColor: Color(0xff4E4E4E),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                            const SizedBox(
+                              height: 35,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(13.0),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'your',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Poppins'),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  const Text(
+                                    'classes',
+                                    style: TextStyle(
+                                        color: Color(0xff61BDEE),
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w900,
+                                        fontFamily: 'Poppins-Bold'),
+                                  ),
+                                  const Spacer(),
+                                  Center(
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.search_rounded,
+                                        size: 30,
+                                        color: Color(0xff61BDEE),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 20),
+                              itemBuilder: (context, index) => MainCard(
+                                myClass: snapshot.data!.data![index],
+                              ),
+                              itemCount: snapshot.data!.data!.length,
+                              scrollDirection: Axis.vertical,
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 20),
-                    itemBuilder: (context, index) => MainCard(
-                      myClass: snapshot.data!.classGroup![index],
-                    ),
-                    itemCount: snapshot.data?.classGroup?.length ?? 0,
-                    scrollDirection: Axis.vertical,
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+                )
+              : LoadingIndicator(
+                  indicatorType: Indicator.ballPulse,
+                  colors: const [Colors.blue],
+                  strokeWidth: 2,
+                  backgroundColor: Colors.white,
+                ),
     );
   }
 }
@@ -159,7 +170,7 @@ class _classesScreenState extends State<classesScreen> {
 class MainCard extends StatelessWidget {
   const MainCard({required this.myClass, Key? key}) : super(key: key);
 
-  final ClassGroup myClass;
+  final ClassModel myClass;
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +194,9 @@ class MainCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AdditionScreen(),
+                    builder: (context) => ClassScreen(
+                      myClass: myClass,
+                    ),
                   ),
                 );
               },
@@ -201,36 +214,18 @@ class MainCard extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.only(left: 16),
                   child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              myClass.name!,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              'Simu',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
+                      Text(
+                        myClass.name!,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                          fontSize: 20,
                         ),
                       ),
                       const Spacer(),
@@ -326,25 +321,48 @@ class MainCard extends StatelessWidget {
 }
 
 class Classes {
+  List<ClassModel>? data;
+
+  Classes({this.data});
+
+  Classes.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = <ClassModel>[];
+      json['data'].forEach((v) {
+        data!.add(new ClassModel.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class ClassModel {
   int? id;
-  int? userId;
   String? name;
+  int? userId;
   String? createdAt;
   String? updatedAt;
   List<ClassGroup>? classGroup;
 
-  Classes(
+  ClassModel(
       {this.id,
-      this.userId,
       this.name,
+      this.userId,
       this.createdAt,
       this.updatedAt,
       this.classGroup});
 
-  Classes.fromJson(Map<String, dynamic> json) {
+  ClassModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    userId = json['user_id'];
     name = json['name'];
+    userId = json['user_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     if (json['ClassGroup'] != null) {
@@ -358,8 +376,8 @@ class Classes {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['user_id'] = this.userId;
     data['name'] = this.name;
+    data['user_id'] = this.userId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     if (this.classGroup != null) {
@@ -371,28 +389,31 @@ class Classes {
 
 class ClassGroup {
   int? id;
-  int? userId;
   int? classId;
+  int? userId;
   String? name;
-  String? modelAnwser;
+  String? modelName;
+  Null? modelAnswer;
   String? createdAt;
   String? updatedAt;
 
   ClassGroup(
       {this.id,
-      this.userId,
       this.classId,
+      this.userId,
       this.name,
-      this.modelAnwser,
+      this.modelName,
+      this.modelAnswer,
       this.createdAt,
       this.updatedAt});
 
   ClassGroup.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    userId = json['user_id'];
     classId = json['class_id'];
+    userId = json['user_id'];
     name = json['name'];
-    modelAnwser = json['model_anwser'];
+    modelName = json['model_name'];
+    modelAnswer = json['model_answer'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -400,10 +421,11 @@ class ClassGroup {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['user_id'] = this.userId;
     data['class_id'] = this.classId;
+    data['user_id'] = this.userId;
     data['name'] = this.name;
-    data['model_anwser'] = this.modelAnwser;
+    data['model_name'] = this.modelName;
+    data['model_answer'] = this.modelAnswer;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;

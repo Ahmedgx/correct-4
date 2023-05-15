@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:untitled1/shared/components.dart';
+import 'package:untitled1/views/actions_screen.dart';
+import 'package:untitled1/views/fifth_screen.dart';
+import 'package:untitled1/views/fourth_screen.dart';
+import 'package:untitled1/views/last_screen.dart';
+import 'package:untitled1/views/third_screen.dart';
 
-class AdditionScreen extends StatefulWidget {
-  const AdditionScreen({Key? key}) : super(key: key);
+import 'classes_screen.dart';
+
+class ClassScreen extends StatefulWidget {
+  const ClassScreen({Key? key, required this.myClass}) : super(key: key);
+
+  final ClassModel myClass;
 
   @override
-  State<AdditionScreen> createState() => _AdditionScreenState();
+  State<ClassScreen> createState() => _ClassScreenState();
 }
 
-class _AdditionScreenState extends State<AdditionScreen> {
+class _ClassScreenState extends State<ClassScreen> {
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -94,19 +103,8 @@ class _AdditionScreenState extends State<AdditionScreen> {
                           const SizedBox(
                             height: 35,
                           ),
-                          const Text(
-                            'FCDS - level 3',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Poppins'),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const Text(
-                            'Simu',
+                          Text(
+                            widget.myClass.name!,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 24,
@@ -119,7 +117,16 @@ class _AdditionScreenState extends State<AdditionScreen> {
                           defaultButton(
                             height: 73,
                             background: Color(0xff61BDEE),
-                            function: () {},
+                            function: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ActionsScreen(
+                                    myClass: widget.myClass,
+                                  ),
+                                ),
+                              );
+                            },
                             text: 'Mid Term',
                           ),
                           SizedBox(
