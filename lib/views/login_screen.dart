@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:untitled1/core/network/cache_helper.dart';
+import 'package:untitled1/core/network/dio_helper.dart';
 import 'package:untitled1/shared/components.dart';
 import 'package:untitled1/views/second_screen.dart';
 import 'package:untitled1/views/signup_screen.dart';
 
+import '../core/const/resource.dart';
 import 'classes_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,14 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Color getColor(Set<MaterialState> states) {
-    //   const Set<MaterialState> interactiveStates = <MaterialState>{};
-    //   if (states.any(interactiveStates.contains)) {
-    //     return Color(0xff586B9D);
-    //   }
-    //   return Color(0xff586B9D);
-    // }
-
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -199,18 +194,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           defaultButton(
                             background: Color(0xff61BDEE),
-                            function: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => classesScreen(),
-                                ),
-                              );
-
+                            function: () async {
                               if (formKey.currentState != null &&
                                   formKey.currentState!.validate()) {
-                                print(emailcontroller.text);
-                                print(passwordcontroller.text);
+                                var response = await DioHelper.post(route: '/users/login', data: {
+                                  'email': emailcontroller.text,
+                                  'password': passwordcontroller.text,
+                                });
+                                await CacheHelper.saveData(key: Cache.token , value: response['tokens']['access_token']);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => classesScreen(),
+                                  ),
+                                );
                               }
                             },
                             text: 'Log in',
