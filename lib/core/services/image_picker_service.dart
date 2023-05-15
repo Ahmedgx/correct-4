@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerService {
-  Future pickImageFromCamera() async {
+  ImagePickerService._();
+
+  static Future pickImageFromCamera() async {
     File image;
     final picker = ImagePicker();
     var _pickedFile = await picker.pickImage(
@@ -11,9 +13,10 @@ class ImagePickerService {
     );
 
     image = File(_pickedFile!.path);
+    return image;
   }
 
-  Future pickImageFromGallery() async {
+  static Future pickImageFromGallery() async {
     File image;
     final picker = ImagePicker();
     var _pickedFile = await picker.pickImage(
@@ -21,5 +24,6 @@ class ImagePickerService {
     );
 
     image = File(_pickedFile!.path);
+    return image;
   }
 }

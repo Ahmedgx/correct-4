@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled1/core/services/image_picker_service.dart';
 
 import 'classes_screen.dart';
 
@@ -119,8 +120,8 @@ class _ActionsScreenState extends State<ActionsScreen> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        //  TODO:
+                      onTap: () async {
+                        await ImagePickerService.pickImageFromGallery();
                       },
                       child: Container(
                         height: 80,
@@ -146,8 +147,8 @@ class _ActionsScreenState extends State<ActionsScreen> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        //  TODO:
+                      onTap: () async {
+                        await ImagePickerService.pickImageFromGallery();
                       },
                       child: Container(
                         height: 80,

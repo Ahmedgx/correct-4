@@ -23,14 +23,6 @@ class _ClassScreenState extends State<ClassScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color(0xffffffff),
-        child: const Image(
-          image: AssetImage('Assets/images/add.png'),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Container(
         height: double.infinity,
         color: Colors.white,
@@ -135,7 +127,16 @@ class _ClassScreenState extends State<ClassScreen> {
                           defaultButton(
                             height: 73,
                             background: Color(0xff61BDEE),
-                            function: () {},
+                            function: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ActionsScreen(
+                                    myClass: widget.myClass,
+                                  ),
+                                ),
+                              );
+                            },
                             text: 'Final',
                           ),
                         ],
@@ -151,3 +152,12 @@ class _ClassScreenState extends State<ClassScreen> {
     );
   }
 }
+
+// floatingActionButton: FloatingActionButton(
+//   onPressed: () {},
+//   backgroundColor: const Color(0xffffffff),
+//   child: const Image(
+//     image: AssetImage('Assets/images/add.png'),
+//   ),
+// ),
+// floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
