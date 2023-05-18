@@ -1,4 +1,10 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:untitled1/core/network/dio_helper.dart';
 import 'package:untitled1/core/services/image_picker_service.dart';
 
 import 'classes_screen.dart';
@@ -121,7 +127,94 @@ class _ActionsScreenState extends State<ActionsScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-                        await ImagePickerService.pickImageFromGallery();
+                        showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 240,
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Options',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    TextButton(
+                                      child: Container(
+                                        height: 55,
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Camera',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        File file = await ImagePickerService
+                                            .pickImageFromCamera();
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Container(
+                                        height: 55,
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueAccent
+                                                .withOpacity(.2),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Gallery',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        File file = await ImagePickerService
+                                            .pickImageFromGallery();
+                                        Navigator.pop(context);
+                                        FormData formData = FormData.fromMap({
+                                          'model': await MultipartFile.fromFile(
+                                            file.path,
+                                            contentType:
+                                                MediaType('image', 'jpg'),
+                                          ),
+                                        });
+                                        var respone = await DioHelper.dio.post(
+                                          'groups/${widget.myClass.id}/setModelAnswer',
+                                          data: formData,
+                                          options: Options(
+                                            contentType: 'multipart/form-data',
+                                          ),
+                                        );
+                                        log(respone.data.toString());
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                       child: Container(
                         height: 80,
