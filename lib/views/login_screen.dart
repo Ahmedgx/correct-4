@@ -205,6 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       'email': emailcontroller.text,
                                       'password': passwordcontroller.text,
                                     });
+                                log(response.toString());
                                 await CacheHelper.saveData(
                                     key: Cache.token,
                                     value: response['data']['tokens']
@@ -256,3 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
+// <!--        android:usesCleartextTraffic="true"-->
+// <!--        android:networkSecurityConfig="@xml/network_security_config"-->

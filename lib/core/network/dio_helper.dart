@@ -9,7 +9,7 @@ class DioHelper {
 
   static init() {
     BaseOptions options = BaseOptions(
-      baseUrl: 'http://localhost:3000/',
+      baseUrl: 'http://10.0.2.2:3000/',
       validateStatus: (status) {
         return !(status.toString() == '401');
       },
