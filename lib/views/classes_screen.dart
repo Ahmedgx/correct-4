@@ -15,36 +15,166 @@ class classesScreen extends StatefulWidget {
 
 class _classesScreenState extends State<classesScreen> {
   var formKey = GlobalKey<FormState>();
+  final TextEditingController controller = TextEditingController();
 
-  Future<Classes> getData() async {
+  late Classes classes;
+  bool isCalled = false;
+
+  Future getData(isRefresh) async {
+    if (!isRefresh && isCalled) return;
     var response = await DioHelper.get(
       route: 'users/classes',
     );
-    Classes classes = Classes.fromJson(response);
-    return classes;
+    Classes llll = Classes.fromJson(response);
+    classes = llll;
+    isCalled = true;
+    dropdownValue = classes.data?[0].id ?? 0;
+    setState(() {});
   }
+
+  late int dropdownValue;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getData(),
-        builder: (context, AsyncSnapshot<Classes> snapshot) {
-          log(snapshot.toString());
+        future: getData(false),
+        builder: (context, AsyncSnapshot snapshot) {
           return (snapshot.connectionState == ConnectionState.done)
               ? Scaffold(
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () {
-                      //  TODO: Add New Card
-                    },
-                    backgroundColor: const Color(0xffffffff),
-                    child: const Image(
-                      image: AssetImage('Assets/images/add.png'),
+                  resizeToAvoidBottomInset: true,
+                  floatingActionButton: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible:
+                                  false, // user must tap button!
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Add Group'),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                        controller: controller,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Group Name',
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                      DropdownButton<int>(
+                                        value: dropdownValue,
+                                        icon: const Icon(Icons.arrow_downward),
+                                        elevation: 16,
+                                        style: const TextStyle(
+                                            color: Colors.deepPurple),
+                                        underline: Container(
+                                          height: 2,
+                                          color: Colors.deepPurpleAccent,
+                                        ),
+                                        onChanged: (value) {
+                                          // This is called when the user selects an item.
+                                          setState(() {
+                                            dropdownValue = value!;
+                                          });
+                                        },
+                                        items: classes.data!
+                                            .map<DropdownMenuItem<int>>(
+                                                (value) {
+                                          return DropdownMenuItem(
+                                            value: value.id!,
+                                            child: Text(value.name!),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Send'),
+                                      onPressed: () async {
+                                        var respone = await DioHelper.dio
+                                            .post('groups', data: {
+                                          'name': controller.text,
+                                          "model_name": "model1",
+                                          "class_id": dropdownValue,
+                                        });
+                                        log(respone.toString());
+                                        await getData(true);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          backgroundColor: const Color(0xffffffff),
+                          child: const Icon(
+                            Icons.group_add,
+                            color: Colors.blue,
+                            size: 24,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        FloatingActionButton(
+                          onPressed: () {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible:
+                                  false, // user must tap button!
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Add Class'),
+                                  content: TextField(
+                                    controller: controller,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Class Name',
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Send'),
+                                      onPressed: () async {
+                                        var respone = await DioHelper.dio.post(
+                                            'classes',
+                                            data: {'name': controller.text});
+                                        log(respone.toString());
+                                        await getData(true);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          backgroundColor: const Color(0xffffffff),
+                          child: const Icon(
+                            Icons.class_,
+                            color: Colors.blue,
+                            size: 24,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   body: SafeArea(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
                         child: Column(
                           children: [
                             Row(
@@ -146,13 +276,13 @@ class _classesScreenState extends State<classesScreen> {
                               separatorBuilder: (context, index) =>
                                   const SizedBox(height: 20),
                               itemBuilder: (context, index) => MainCard(
-                                myClass: snapshot.data!.data![index],
+                                myClass: classes.data![index],
                               ),
-                              itemCount: snapshot.data!.data!.length,
+                              itemCount: classes.data!.length,
                               scrollDirection: Axis.vertical,
                             ),
                             const SizedBox(
-                              height: 12,
+                              height: 32,
                             ),
                           ],
                         ),

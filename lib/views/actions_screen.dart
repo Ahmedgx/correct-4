@@ -10,9 +10,9 @@ import 'package:untitled1/core/services/image_picker_service.dart';
 import 'classes_screen.dart';
 
 class ActionsScreen extends StatefulWidget {
-  const ActionsScreen({required this.myClass, Key? key}) : super(key: key);
+  const ActionsScreen({required this.myGroup, Key? key}) : super(key: key);
 
-  final Data myClass;
+  final ClassGroup myGroup;
 
   @override
   State<ActionsScreen> createState() => _ActionsScreenState();
@@ -20,6 +20,7 @@ class ActionsScreen extends StatefulWidget {
 
 class _ActionsScreenState extends State<ActionsScreen> {
   File? file;
+  var images;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +89,7 @@ class _ActionsScreenState extends State<ActionsScreen> {
                 height: 32,
               ),
               Text(
-                widget.myClass.name!,
+                widget.myGroup.name!,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -328,7 +329,41 @@ class _ActionsScreenState extends State<ActionsScreen> {
                     ),
                   ),
                 ],
-              )
+              ),
+              images != null
+                  ? Expanded(
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: images.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          String path = images[index]['path'];
+                          path = path.replaceFirst('localhost:', '10.0.2.2:');
+                          log(path);
+                          return Column(
+                            children: [
+                              Image(
+                                image: NetworkImage(path),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                (images[index]['score'] ?? 0).toString(),
+                                style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Divider(),
+                            ],
+                          );
+                        },
+                      ),
+                    )
+                  : SizedBox(),
             ],
           ),
         ),
@@ -336,8 +371,8 @@ class _ActionsScreenState extends State<ActionsScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 32, left: 16, right: 16),
         child: GestureDetector(
-          onTap: () {
-            //  TODO: START BTN
+          onTap: () async {
+            await _getImages();
           },
           child: Container(
             height: 55,
@@ -369,7 +404,7 @@ class _ActionsScreenState extends State<ActionsScreen> {
       ),
     });
     var respone = await DioHelper.dio.post(
-      'groups/${widget.myClass.id}/setModelAnswer',
+      'groups/${widget.myGroup.id}/setModelAnswer',
       data: formData,
       options: Options(
         contentType: 'multipart/form-data',
@@ -386,15 +421,28 @@ class _ActionsScreenState extends State<ActionsScreen> {
         contentType: MediaType('image', 'jpg'),
       ),
     });
-    log("ID: " + widget.myClass.id.toString());
+    log("ID: " + widget.myGroup.id.toString());
 
     var respone = await DioHelper.dio.post(
-      'groups/${widget.myClass.id}/correctMCQPapers',
+      'groups/${widget.myGroup.id}/correctMCQPapers',
       data: formData,
       options: Options(
         contentType: 'multipart/form-data',
       ),
     );
     log("FKN DATA: " + respone.data.toString());
+  }
+
+  _getImages() async {
+    images = [];
+    var respone = await DioHelper.dio.get(
+      'groups/${widget.myGroup.id!}',
+    );
+    var papers = respone.data['data']['Papers'];
+    setState(() {
+      images = papers;
+    });
+
+    log(images.toString());
   }
 }
