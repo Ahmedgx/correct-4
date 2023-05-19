@@ -8,6 +8,7 @@ import 'package:untitled1/core/network/dio_helper.dart';
 import 'package:untitled1/core/services/image_picker_service.dart';
 
 import 'classes_screen.dart';
+import 'excel_screen.dart';
 
 class ActionsScreen extends StatefulWidget {
   const ActionsScreen({required this.myGroup, Key? key}) : super(key: key);
@@ -100,8 +101,8 @@ class _ActionsScreenState extends State<ActionsScreen> {
                 height: 32,
               ),
               GestureDetector(
-                onTap: () {
-                  //  TODO:
+                onTap: () async {
+                  await _getCSV();
                 },
                 child: Container(
                   height: 80,
@@ -382,7 +383,7 @@ class _ActionsScreenState extends State<ActionsScreen> {
             ),
             child: Center(
               child: Text(
-                'Start',
+                'Load Papers',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -444,5 +445,16 @@ class _ActionsScreenState extends State<ActionsScreen> {
     });
 
     log(images.toString());
+  }
+
+  _getCSV() async {
+    var respone = await DioHelper.dio.post(
+      'groups/${widget.myGroup.id}/generateReport',
+    );
+
+    var data = respone.data.split('\n');
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ExcelScreen(data: data)));
   }
 }
