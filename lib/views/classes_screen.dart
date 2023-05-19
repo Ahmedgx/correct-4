@@ -27,9 +27,10 @@ class _classesScreenState extends State<classesScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getData(),
-      builder: (context, AsyncSnapshot<Classes> snapshot) =>
-          (snapshot.connectionState == ConnectionState.done)
+        future: getData(),
+        builder: (context, AsyncSnapshot<Classes> snapshot) {
+          log(snapshot.toString());
+          return (snapshot.connectionState == ConnectionState.done)
               ? Scaffold(
                   floatingActionButton: FloatingActionButton(
                     onPressed: () {
@@ -164,15 +165,15 @@ class _classesScreenState extends State<classesScreen> {
                   colors: const [Colors.blue],
                   strokeWidth: 2,
                   backgroundColor: Colors.white,
-                ),
-    );
+                );
+        });
   }
 }
 
 class MainCard extends StatelessWidget {
   const MainCard({required this.myClass, Key? key}) : super(key: key);
 
-  final ClassModel myClass;
+  final Data myClass;
 
   @override
   Widget build(BuildContext context) {
@@ -279,8 +280,7 @@ class MainCard extends StatelessWidget {
                       child: Row(
                         children: [
                           TextButton(
-                            onPressed: () {
-                            },
+                            onPressed: () {},
                             child: const Text(
                               'Add Model Answer',
                               style: TextStyle(
@@ -324,15 +324,15 @@ class MainCard extends StatelessWidget {
 }
 
 class Classes {
-  List<ClassModel>? data;
+  List<Data>? data;
 
   Classes({this.data});
 
   Classes.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <ClassModel>[];
+      data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new ClassModel.fromJson(v));
+        data!.add(new Data.fromJson(v));
       });
     }
   }
@@ -346,7 +346,7 @@ class Classes {
   }
 }
 
-class ClassModel {
+class Data {
   int? id;
   String? name;
   int? userId;
@@ -354,7 +354,7 @@ class ClassModel {
   String? updatedAt;
   List<ClassGroup>? classGroup;
 
-  ClassModel(
+  Data(
       {this.id,
       this.name,
       this.userId,
@@ -362,7 +362,7 @@ class ClassModel {
       this.updatedAt,
       this.classGroup});
 
-  ClassModel.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     userId = json['user_id'];
@@ -396,7 +396,7 @@ class ClassGroup {
   int? userId;
   String? name;
   String? modelName;
-  Null? modelAnswer;
+  String? modelAnswer;
   String? createdAt;
   String? updatedAt;
 

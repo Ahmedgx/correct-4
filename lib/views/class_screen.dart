@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:untitled1/shared/components.dart';
 import 'package:untitled1/views/actions_screen.dart';
-import 'package:untitled1/views/fifth_screen.dart';
-import 'package:untitled1/views/fourth_screen.dart';
-import 'package:untitled1/views/last_screen.dart';
-import 'package:untitled1/views/third_screen.dart';
 
 import 'classes_screen.dart';
 
 class ClassScreen extends StatefulWidget {
   const ClassScreen({Key? key, required this.myClass}) : super(key: key);
 
-  final ClassModel myClass;
+  final Data myClass;
 
   @override
   State<ClassScreen> createState() => _ClassScreenState();

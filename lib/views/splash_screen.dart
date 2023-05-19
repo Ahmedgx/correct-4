@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-
-import 'fifth_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,11 +11,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-        Duration(seconds: 2),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => FifthScreen(),
-            )));
   }
 
   @override

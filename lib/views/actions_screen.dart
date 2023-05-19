@@ -12,13 +12,14 @@ import 'classes_screen.dart';
 class ActionsScreen extends StatefulWidget {
   const ActionsScreen({required this.myClass, Key? key}) : super(key: key);
 
-  final ClassModel myClass;
+  final Data myClass;
 
   @override
   State<ActionsScreen> createState() => _ActionsScreenState();
 }
 
 class _ActionsScreenState extends State<ActionsScreen> {
+  File? file;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,9 +166,11 @@ class _ActionsScreenState extends State<ActionsScreen> {
                                         ),
                                       ),
                                       onPressed: () async {
-                                        File file = await ImagePickerService
+                                        file = await ImagePickerService
                                             .pickImageFromCamera();
+                                        setState(() {});
                                         Navigator.pop(context);
+                                        await _sendImage();
                                       },
                                     ),
                                     TextButton(
@@ -189,24 +192,11 @@ class _ActionsScreenState extends State<ActionsScreen> {
                                         ),
                                       ),
                                       onPressed: () async {
-                                        File file = await ImagePickerService
+                                        file = await ImagePickerService
                                             .pickImageFromGallery();
+                                        setState(() {});
                                         Navigator.pop(context);
-                                        FormData formData = FormData.fromMap({
-                                          'model': await MultipartFile.fromFile(
-                                            file.path,
-                                            contentType:
-                                                MediaType('image', 'jpg'),
-                                          ),
-                                        });
-                                        var respone = await DioHelper.dio.post(
-                                          'groups/${widget.myClass.id}/setModelAnswer',
-                                          data: formData,
-                                          options: Options(
-                                            contentType: 'multipart/form-data',
-                                          ),
-                                        );
-                                        log(respone.data.toString());
+                                        await _sendImage();
                                       },
                                     ),
                                   ],
@@ -241,7 +231,82 @@ class _ActionsScreenState extends State<ActionsScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-                        await ImagePickerService.pickImageFromGallery();
+                        showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 240,
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Options',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    TextButton(
+                                      child: Container(
+                                        height: 55,
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Camera',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        file = await ImagePickerService
+                                            .pickImageFromCamera();
+                                        setState(() {});
+                                        Navigator.pop(context);
+                                        await _sendImage2();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Container(
+                                        height: 55,
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueAccent
+                                                .withOpacity(.2),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Gallery',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        file = await ImagePickerService
+                                            .pickImageFromGallery();
+                                        setState(() {});
+                                        await _sendImage2();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                       child: Container(
                         height: 80,
@@ -251,7 +316,7 @@ class _ActionsScreenState extends State<ActionsScreen> {
                         ),
                         child: Center(
                           child: Text(
-                            'Add MCQ Paper',
+                            'Add MCQ Papers',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -272,7 +337,7 @@ class _ActionsScreenState extends State<ActionsScreen> {
         padding: const EdgeInsets.only(bottom: 32, left: 16, right: 16),
         child: GestureDetector(
           onTap: () {
-            //  TODO:
+            //  TODO: START BTN
           },
           child: Container(
             height: 55,
@@ -294,5 +359,42 @@ class _ActionsScreenState extends State<ActionsScreen> {
         ),
       ),
     );
+  }
+
+  _sendImage() async {
+    FormData formData = FormData.fromMap({
+      'model': await MultipartFile.fromFile(
+        file!.path,
+        contentType: MediaType('image', 'jpg'),
+      ),
+    });
+    var respone = await DioHelper.dio.post(
+      'groups/${widget.myClass.id}/setModelAnswer',
+      data: formData,
+      options: Options(
+        contentType: 'multipart/form-data',
+      ),
+    );
+    log(respone.data.toString());
+  }
+
+  _sendImage2() async {
+    log(file!.path.toString());
+    FormData formData = FormData.fromMap({
+      'papers': await MultipartFile.fromFile(
+        file!.path,
+        contentType: MediaType('image', 'jpg'),
+      ),
+    });
+    log("ID: " + widget.myClass.id.toString());
+
+    var respone = await DioHelper.dio.post(
+      'groups/${widget.myClass.id}/correctMCQPapers',
+      data: formData,
+      options: Options(
+        contentType: 'multipart/form-data',
+      ),
+    );
+    log("FKN DATA: " + respone.data.toString());
   }
 }

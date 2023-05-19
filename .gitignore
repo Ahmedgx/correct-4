@@ -45,3 +45,26 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/ios/.symlinks/plugins/image_picker_ios/
+/ios/Pods/Target Support Files/image_picker_ios/image_picker_ios.debug.xcconfig
+/ios/Pods/Target Support Files/image_picker_ios/image_picker_ios.modulemap
+/ios/Pods/Local Podspecs/image_picker_ios.podspec.json
+/ios/Pods/Target Support Files/image_picker_ios/image_picker_ios.release.xcconfig
+/ios/Pods/Pods.xcodeproj/xcuserdata/mohamedabdelrazek.xcuserdatad/xcschemes/image_picker_ios.xcscheme
+/ios/Pods/Target Support Files/image_picker_ios/image_picker_ios-dummy.m
+/ios/Pods/Target Support Files/image_picker_ios/image_picker_ios-Info.plist
+/ios/Pods/Target Support Files/image_picker_ios/image_picker_ios-prefix.pch
+/android/.gradle/7.4/checksums/md5-checksums.bin
+/android/.gradle/7.4/checksums/sha1-checksums.bin
+/ios/.symlinks/plugins/shared_preferences_foundation/
+/ios/Pods/Target Support Files/shared_preferences_foundation/shared_preferences_foundation.debug.xcconfig
+/ios/Pods/Target Support Files/shared_preferences_foundation/shared_preferences_foundation.modulemap
+/ios/Pods/Local Podspecs/shared_preferences_foundation.podspec.json
+/ios/Pods/Target Support Files/shared_preferences_foundation/shared_preferences_foundation.release.xcconfig
+/ios/Pods/Pods.xcodeproj/xcuserdata/mohamedabdelrazek.xcuserdatad/xcschemes/shared_preferences_foundation.xcscheme
+/ios/Pods/Target Support Files/shared_preferences_foundation/shared_preferences_foundation-dummy.m
+/ios/Pods/Target Support Files/shared_preferences_foundation/shared_preferences_foundation-Info.plist
+/ios/Pods/Target Support Files/shared_preferences_foundation/shared_preferences_foundation-prefix.pch
+/ios/Pods/Target Support Files/shared_preferences_foundation/shared_preferences_foundation-umbrella.h
+/ios/.symlinks/plugins/image_picker_ios/
+/ios/.symlinks/plugins/shared_preferences_foundation/
