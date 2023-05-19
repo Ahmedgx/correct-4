@@ -26,7 +26,9 @@ class _ExcelScreenState extends State<ExcelScreen> {
             margin: const EdgeInsets.all(3),
             color: index == 0 ? Colors.blue : Colors.white,
             child: ListTile(
-              title: Text(widget.data[index].toString().split(',')[0]),
+              title: Text(widget.data[index].toString().split(',')[0] == 'null'
+                  ? 'No Student ID'
+                  : widget.data[index].toString().split(',')[0]),
               trailing: Text(
                   (widget.data[index].toString().split(',')[1]) == 'null'
                       ? "0"
