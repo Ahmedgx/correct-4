@@ -4,7 +4,7 @@ import 'package:untitled1/core/network/api_interceptors.dart';
 import 'package:untitled1/core/network/cache_helper.dart';
 import 'package:untitled1/core/network/dio_helper.dart';
 import 'package:untitled1/views/classes_screen.dart';
-import 'package:untitled1/views/splash_screen.dart';
+import 'package:untitled1/views/login_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: CacheHelper.getData(key: Cache.token) == null
-          ? SplashScreen()
+          ? LoginScreen()
           : classesScreen(),
     );
   }
